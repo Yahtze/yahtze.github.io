@@ -2,17 +2,23 @@
 title: Basketball Video Analytics Pipeline
 ---
 
+> **Disclaimer:** The content on this page was AI-generated and may not be fully accurate.
+
 **Python, PyTorch, OpenCV, Roboflow, SAM2** | *Nov 2025*
 
 ## Overview
 
-Engineered a Computer Vision pipeline processing 100K+ frames, utilizing PyTorch and OpenCV for player and ball detection with Roboflow models.
+This project processes basketball game footage into structured analytics, combining computer vision for player/ball detection with a RAG-based question-answering system over game commentary.
 
-## Key Contributions
+## The Problem
 
-- Engineered a Computer Vision pipeline processing 100K+ frames, utilizing PyTorch and OpenCV for player and ball detection with Roboflow models.
-- Improved pipeline performance by replacing SAM2-based segmentation with ByteTrack tracking, achieving a 27x speedup (for a 20-minute clip) to resolve compute bottlenecks.
-- Added a local RAG-based QA system over 10K+ tokens of game commentary using Ollama and Qdrant for context-aware gameplay insights.
+Analyzing basketball game footage manually is time-consuming and subjective. Coaches and analysts need fast, automated ways to detect player positions, track ball movement, and extract insights from both the visual feed and broadcast commentary.
+
+## How It Works
+
+The pipeline processes over 100K video frames using PyTorch and OpenCV for player and ball detection through Roboflow models. The initial approach used SAM2-based segmentation, but this proved computationally expensive. By switching to ByteTrack for object tracking, the pipeline achieved a 27x speedup on a 20-minute clip — turning what was a compute bottleneck into a practical, real-time-capable system.
+
+On top of the visual detection layer, a local RAG-based QA system was built over 10K+ tokens of game commentary. Using Ollama for local LLM inference and Qdrant for vector search, the system can answer natural-language questions about gameplay, drawing context from both the detected visual events and the broadcast commentary.
 
 ## Tech Stack
 

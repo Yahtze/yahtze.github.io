@@ -2,17 +2,27 @@
 title: Full-Stack RAG Document QA System
 ---
 
+> **Disclaimer:** The content on this page was AI-generated from the GitHub repository README and may not be fully accurate. Please refer to the [source repository](https://github.com/Yahtze/QA_RAG) for the most up-to-date information.
+
 **FastAPI, React, Qdrant, Redis, Celery, PostgreSQL** | *Jun 2025* | [GitHub](https://github.com/Yahtze/QA_RAG)
 
 ## Overview
 
-A full-stack RAG application. Upload documents, ask questions, get grounded answers with inline citations — all streamed in real time. Engineered a hybrid RAG pipeline using Reciprocal Rank Fusion (RRF) to fuse BM25 and semantic vector search, dynamically filtering candidate documents down to the top-k optimal context chunks for SSE answer streaming.
+A full-stack RAG application where users upload documents, ask questions in natural language, and receive grounded answers with inline citations — all streamed in real time. The system combines lexical and semantic search, fuses them with Reciprocal Rank Fusion, and uses a Redis-based semantic cache to cut LLM costs for repeated queries.
 
-## Key Contributions
+## The Problem
 
-- Engineered a hybrid RAG pipeline using Reciprocal Rank Fusion (RRF) to fuse BM25 and semantic vector search, dynamically filtering candidate documents down to the top-k optimal context chunks for SSE answer streaming.
-- Developed an asynchronous distributed ingestion engine using Celery to handle parallel document processing, achieving a throughput of 100+ pages/minute across text extraction, chunking, and 1,536-dim embedding generation.
-- Designed a Redis HNSW semantic cache utilizing a two-pass hydration strategy, cutting downstream LLM API costs by serving repetitive queries with a sub-75ms response latency.
+Most document QA systems either rely on keyword matching (BM25) or semantic vector search — but each has blind spots. Keyword search misses semantically relevant passages that don't share exact terms. Vector search can miss precise terminology. And both approaches pay the full LLM cost on every query, even when the answer was already computed for a similar question minutes ago.
+
+## How It Works
+
+**Hybrid Retrieval.** When a question arrives, it's searched against both Postgres full-text (BM25) and Qdrant semantic vectors simultaneously. The results are fused using Reciprocal Rank Fusion (RRF), which combines the ranked lists into a single ordering that captures both lexical precision and semantic relevance. The top-k chunks after fusion become the context for the LLM.
+
+**Semantic Cache with Two-Pass Hydration.** Redis stores cached answers, but instead of storing full citation objects, it stores only chunk IDs. On every cache hit, citations are hydrated live from Qdrant (verifying chunks still exist) and Postgres (fetching fresh filenames, pages, and ACLs). This guarantees citation freshness without sacrificing cache speed. If hydration fails, the system falls through to full RAG — no stale answers are ever served.
+
+**Async Ingestion.** Document processing runs through Celery workers: text extraction → chunking → embedding → vector indexing. This distributed architecture achieves 100+ pages/minute throughput. A reconciliation CLI detects stale or missing ingestion states and applies recovery actions automatically.
+
+**Streaming Answers.** The backend streams LLM responses via SSE with inline citation labels (`[1]`, `[2]`, etc.). Citations are clickable — activating source cards that show the exact passage, page number, and document name.
 
 ## Architecture
 
@@ -49,62 +59,13 @@ A full-stack RAG application. Upload documents, ask questions, get grounded answ
                                           └───────────┘
 ```
 
-## Key Features
-
-- **Upload** PDF, plain text, and Markdown documents (single or batch)
-- **Hybrid Retrieval** — BM25 full-text (Postgres `tsvector`) + semantic similarity (Qdrant vectors), fused with Reciprocal Rank Fusion (RRF)
-- **Streaming Answers** — SSE with inline citation labels (`[1]`, `[2]`, etc.)
-- **Semantic Cache** — Redis vector similarity matching; cached answers use Two-Pass Hydration to guarantee fresh, live citations
-- **Multi-turn Chat** — full conversation history chained with each LLM call
-- **Active Document Scope** — per-conversation document selection controls RAG participation
-- **Reconciliation CLI** — detects stale/missing ingestion states and applies recovery
-
-## Ingestion Pipeline
-
-```
-PDF/Text/Markdown Parser
-    │
-    ▼
-Chunker (deterministic character-based)
-    │
-    ▼
-Embedder (text-embedding-3-small, 1536-dim)
-    │
-    ▼
-Store Chunks (Postgres)
-    │
-    ▼
-Store Vectors (Qdrant)
-```
-
-## Answer Pipeline
-
-```
-Semantic Cache (Redis)
-    │
-    ├─ hit → hydrate chunk IDs (Two-Pass Hydration)
-    │         ├─ Qdrant fetch-by-ID (verify chunks exist)
-    │         ├─ Postgres join (fresh filename, page, ACLs)
-    │         ├─ success → return cached answer + fresh citations
-    │         └─ failure → fall through to full RAG
-    │
-    ▼ miss
-BM25 (Postgres) + Semantic (Qdrant)
-    │
-    ▼
-RRF Fusion → Context Pack → Prompt Build → LLM Stream → Citation Map
-    │
-    ▼
-Persist & Cache (store chunk_ids only) → Stream to Client
-```
-
 ## Design Decisions
 
-- **Module interfaces are the test boundary** — tests hit service classes directly, not HTTP routes
-- **Service seams are mandatory** — all async/API behavior lives behind typed interfaces for swappable adapters
-- **Chunk text is source of truth in Postgres** — Qdrant holds vectors only; retrieval joins back for text + metadata
-- **Two-Pass Hydration** — semantic cache stores only chunk IDs; on cache hit, citations are hydrated live from Qdrant + Postgres to guarantee freshness
-- **Streaming persistence** — user message persisted before stream starts; assistant message + citations persisted after stream completes
+The architecture prioritizes modularity and testability. Service seams are mandatory — all async and API behavior lives behind typed interfaces so adapters can be swapped without rewriting UI or route handlers. Tests hit deep modules (service classes) directly, not HTTP routes, using fake embeddings and fake vector stores for deterministic CI.
+
+Chunk text lives in Postgres as the source of truth; Qdrant holds vectors only. Retrieval joins back to Postgres for text and metadata. This separation keeps the vector store lean and ensures that document updates propagate correctly.
+
+Multi-turn conversation history is fully chained with each LLM call — prior questions, context chunks, and answers are all passed so the model can reference earlier turns. Active document scope is managed per-conversation, allowing users to control which documents participate in RAG.
 
 ## Tech Stack
 

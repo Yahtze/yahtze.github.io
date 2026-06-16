@@ -2,52 +2,35 @@
 title: GraphRAG-Based AI Tutor
 ---
 
+> **Disclaimer:** The content on this page was AI-generated from the GitHub repository README and may not be fully accurate. Please refer to the [source repository](https://github.com/Yahtze/Erica-AI-Project) for the most up-to-date information.
+
 **Nano-GraphRAG, Qdrant, Chainlit, Ollama, Docker** | *Dec 2025* | [GitHub](https://github.com/Yahtze/Erica-AI-Project)
 
 ## Overview
 
-Erica is an AI tutor designed to assist students by leveraging a custom-built Knowledge Graph (KG) generated from course-related content. Built a hybrid RAG pipeline integrating vector similarity search with knowledge graph traversal (Nano-GraphRAG), enabling multi-hop reasoning and increasing answer relevance by 30% over baseline.
+Erica is an AI tutor that helps students engage with course material by combining vector-based retrieval with knowledge graph traversal. Rather than relying on flat document search, Erica builds a structured Knowledge Graph from course content and uses it to answer questions with multi-hop reasoning — connecting ideas across documents that a standard RAG pipeline would miss.
 
-The Knowledge Graph was constructed using 35 articles sourced from the website hosted at pantelis.github.io. The system is highly scalable — expanding the tutor to cover the entire course requires only adding more article URLs to the input list.
+## The Problem
 
-## Key Contributions
-
-- Implemented an end-to-end Generative AI pipeline for scraping, chunking, and indexing high-volume datasets using as feature embeddings in a Qdrant vector store.
-- Built a hybrid RAG pipeline integrating vector similarity search with knowledge graph traversal (Nano-GraphRAG), enabling multi-hop reasoning and increasing answer relevance by 30% over baseline.
-- Developed an automated graph construction workflow using Qwen3-32B, reducing manual schema design effort by 80% while processing 255+ documents for downstream retrieval.
+Traditional RAG systems retrieve documents based on semantic similarity, but they struggle with questions that require connecting information from multiple sources. For a course tutor, this is a significant limitation — students often ask questions that span multiple topics or require synthesizing related concepts.
 
 ## How It Works
 
-1. **Data Fetching** — Scrapes content from URLs listed in `kg_urls.json` and stores raw results in MongoDB.
-2. **Data Transformation** — Cleans and preprocesses scraped data, storing cleaned documents in a separate MongoDB collection.
-3. **Knowledge Graph Construction** — Builds the KG using the OpenRouter API with Qwen3-32B for efficient routing and model flexibility across parallel LLM calls.
-4. **Query Pipeline** — When a user asks a question:
-   - `src/subgraphretriever.py` retrieves the relevant subgraph via semantic search and structural graph reasoning.
-   - `educationalplanner.py` formats the subgraph into contextual input and sends it to the LLM with a system prompt.
-   - The LLM returns an answer grounded in the extracted Knowledge Graph.
+The system is built as a pipeline with four stages:
 
-## Architecture
+**Data Ingestion.** Articles are scraped from URLs listed in `kg_urls.json` and stored in MongoDB. The raw content is cleaned, preprocessed, and stored in a separate collection ready for graph construction.
 
-```
-┌──────────────┐         ┌─────────────────────┐
-│  Chainlit UI │◄───────►│   Application Layer  │
-└──────────────┘         │   (src/app.py)       │
-                         └──────────┬──────────┘
-                                    │
-                    ┌───────────────┼───────────────┐
-                    ▼               ▼               ▼
-            ┌──────────────┐ ┌───────────┐ ┌──────────────┐
-            │ Subgraph     │ │ Nano-     │ │ Qdrant       │
-            │ Retriever    │ │ GraphRAG  │ │ Vector Store │
-            └──────────────┘ └───────────┘ └──────────────┘
-                                    │
-                                    ▼
-                         ┌──────────────────┐
-                         │  Knowledge Graph  │
-                         │  (built via       │
-                         │   Qwen3-32B)      │
-                         └──────────────────┘
-```
+**Knowledge Graph Construction.** The graph is built using Qwen3-32B via the OpenRouter API. OpenRouter was chosen for its efficient routing and model flexibility, which matters because GraphRAG involves a large number of parallel LLM calls. The automated graph construction workflow reduced manual schema design effort by 80% while processing 255+ documents.
+
+**Query-Time Retrieval.** When a student asks a question, the subgraph retriever performs semantic search and structural graph reasoning to find the relevant portion of the knowledge graph. This hybrid approach enables multi-hop reasoning — traversing edges in the graph to connect related concepts.
+
+**Answer Generation.** The retrieved subgraph is formatted into context and sent to the LLM with a system prompt. The LLM returns an answer grounded in the knowledge graph, with citations back to the source material.
+
+## Why GraphRAG?
+
+Standard vector-similarity RAG retrieves documents independently — it finds the most similar chunks but doesn't understand how they relate. By building a knowledge graph, Erica captures explicit relationships between concepts: prerequisites, definitions, examples, and causal links. This structural understanding increased answer relevance by 30% over baseline vector-only retrieval.
+
+The system is also highly scalable. Expanding coverage to additional course material only requires adding more article URLs to the input list — the graph construction and retrieval pipelines handle the rest automatically.
 
 ## Tech Stack
 
