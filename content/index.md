@@ -3,6 +3,14 @@ title: Home
 order: 1
 ---
 
+<div style="display: flex; align-items: center; gap: 1.5rem; margin-bottom: 1rem;">
+  <img src="/static/profile.jpg" alt="Yathin Reddy Duvuru" style="width: 150px; height: 150px; border-radius: 50%; object-fit: cover; border: 3px solid var(--lightgray); flex-shrink: 0;" />
+  <div>
+    <h1 style="margin: 0 0 0.25rem 0;">Yathin Reddy Duvuru</h1>
+    <p style="margin: 0; opacity: 0.7;">AI Systems · ML Research · Trustworthy AI</p>
+  </div>
+</div>
+
 Hi, I'm Yathin Reddy Duvuru. Welcome to my Blog!
 
 I build AI systems that bridge cutting-edge research and real-world deployment. My recent work focuses on agentic AI, retrieval systems, context engineering, and evaluation infrastructure for large language model applications. I design and develop multi-agent workflows, GraphRAG pipelines, and observability frameworks that improve the reliability, transparency, and performance of production AI systems. Check out my [[projects]] to see some of this work in action.
