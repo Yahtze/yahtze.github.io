@@ -3,7 +3,6 @@ title: Contact
 order: 4
 ---
 
-Thanks for visiting! Learn more [[about|home]] me, check out my [[projects]], or view my [[experience]].
 
 **E-Mail**  
 yathinreddy2004@gmail.com

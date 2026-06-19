@@ -41,3 +41,4 @@ NumPy, Matplotlib, Seaborn
 ## Links
 - [GitHub](https://github.com/Yahtze)
 - [LinkedIn](https://www.linkedin.com/in/duvuru-yathin-reddy/)
+- [[Resume]]
