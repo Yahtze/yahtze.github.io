@@ -4,7 +4,7 @@ title: Full-Stack RAG Document QA System
 
 > **Disclaimer:** The content on this page was AI-generated from the GitHub repository README and may not be fully accurate. Please refer to the [source repository](https://github.com/Yahtze/QA_RAG) for the most up-to-date information.
 
-**FastAPI, React, Qdrant, Redis, Celery, PostgreSQL** | *Jun 2025* | [GitHub](https://github.com/Yahtze/QA_RAG)
+**FastAPI, React, Qdrant, Redis, Celery, PostgreSQL** | *Jun 2026* | [GitHub](https://github.com/Yahtze/QA_RAG)
 
 ## Overview
 

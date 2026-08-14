@@ -7,19 +7,17 @@ order: 1
   <img src="/static/profile.jpg" alt="Yathin Reddy Duvuru" style="width: 150px; height: 150px; border-radius: 50%; object-fit: cover; border: 3px solid var(--lightgray); flex-shrink: 0;" />
   <div>
     <h1 style="margin: 0 0 0.25rem 0;">Yathin Reddy Duvuru (Yahtze)</h1>
-    <p style="margin: 0; opacity: 0.7;">AI Systems · ML Research · Trustworthy AI</p>
+    <p style="margin: 0; opacity: 0.7;">LLM Systems · ML Research · Trustworthy AI</p>
   </div>
 </div>
 
 Hi, I'm Yathin Reddy Duvuru (Yahtze). Welcome to my Blog!
 
-I build AI systems that bridge cutting-edge research and real-world deployment. My recent work focuses on agentic AI, retrieval systems, context engineering, and evaluation infrastructure for large language model applications. I design and develop multi-agent workflows, GraphRAG pipelines, and observability frameworks that improve the reliability, transparency, and performance of production AI systems. Check out my [[projects]] to see some of this work in action.
+I build systems that make large language models more reliable, efficient, and deployable in production. My work spans the full LLM application stack — from retrieval and context engineering to multi-agent orchestration, evaluation, and infrastructure. I've designed adaptive RAG pipelines, reusable embedding architectures, durable indexing workflows, and observability frameworks that help AI systems retrieve better context, reason more effectively, and remain measurable in production. Check out my [[projects]] to see some of this work in action.
 
-Before transitioning into generative AI, my research centered on machine learning interpretability and time-series forecasting, resulting in published work on explainable deep learning models for solar energy prediction. I continue to pursue explainability and model auditing research, applying XAI techniques to evaluate vision-language models and better understand model behavior, bias, and decision-making processes. You can read more about my research background in my [[experience]].
+My research began in machine learning interpretability and time-series forecasting, resulting in published work on explainable deep learning models for solar energy prediction. More recently, I've applied explainability techniques to vision-language models, using attribution methods alongside grounding and segmentation models to study model attention, behavior, and failure modes. I'm interested in building evaluation methodologies that make modern AI systems more transparent, auditable, and trustworthy. You can read more about my research background in my [[experience]].
 
-I'm particularly interested in building trustworthy AI systems — combining advances in generative models, retrieval architectures, evaluation methodologies, and interpretability research to create AI that is both powerful and understandable.
-
-I'm seeking Summer 2026 internships in Applied ML or GenAI Engineering that allow me to work end-to-end on real-world systems, contributing beyond model development to drive system-level improvements, with an emphasis on accessible, transparent, and trustworthy AI. Feel free to [[contact]] me if you'd like to connect.
+My current interests extend beyond LLM applications into the models themselves. I'm particularly interested in LLM post-training, preference optimization, inference optimization, and systems techniques that improve model quality while reducing latency and serving costs. Feel free to [[contact]] me if you'd like to connect.
 
 ## Technical Skills
 

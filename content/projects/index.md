@@ -5,6 +5,17 @@ order: 2
 
 A collection of things I've built.
 
+## [[projects/rag-document-qa|Full-Stack RAG Document QA System]]
+
+**FastAPI, React, Qdrant, Redis, Celery, PostgreSQL** | *Jun 2026* | [GitHub](https://github.com/Yahtze/QA_RAG)
+
+- Engineered a hybrid RAG pipeline using Reciprocal Rank Fusion (RRF) to fuse BM25 and semantic vector search, dynamically filtering candidate documents down to the top-k optimal context chunks for SSE answer streaming.
+- Developed an asynchronous distributed ingestion engine using Celery to handle parallel document processing, achieving a throughput of 100+ pages/minute across text extraction, chunking, and 1,536-dim embedding generation.
+- Designed a Redis HNSW semantic cache utilizing a two-pass hydration strategy, cutting downstream LLM API costs by serving repetitive queries with a sub-75ms response latency.
+- Implemented a stateful multi-turn conversation engine with strict per-session document scoping, ensuring isolated user context windows and zero cross-tenant data leakage during vector retrieval.
+
+---
+
 ## [[projects/recipe-normalization|Automated Recipe Normalization Engine]]
 
 **Triton, Kubernetes, Ansible, MLflow, HF Accelerate** | *May 2026* | [GitHub](https://github.com/Yahtze/recipe-scraper-mlops)
@@ -33,24 +44,3 @@ A collection of things I've built.
 - Engineered a Computer Vision pipeline processing 100K+ frames, utilizing PyTorch and OpenCV for player and ball detection with Roboflow models.
 - Improved pipeline performance by replacing SAM2-based segmentation with ByteTrack tracking, achieving a 27x speedup (for a 20-minute clip) to resolve compute bottlenecks.
 - Added a local RAG-based QA system over 10K+ tokens of game commentary using Ollama and Qdrant for context-aware gameplay insights.
-
----
-
-## [[projects/solar-lstm-xai|Solar Power Forecasting with LSTM & XAI]]
-
-**PyTorch, LSTM, XAI, Genetic Algorithms** | *Aug 2024 – May 2025*
-
-- Researched PyTorch-based LSTM networks for time-series forecasting in solar power, and integrated eXplainable AI (XAI) achieving a 40% reduction in training time by guiding downstream feature selection.
-- Optimized model architectures and engineered domain-specific features using polynomial feature augmentation, achieving a 10% RMSE reduction over traditional statistical and regression baselines.
-- Developed a Genetic Algorithm script for automated hyperparameter optimization, reducing RMSE by an additional 4% while minimizing manual tuning effort.
-- Awarded the Department Silver Medal at SRM Research Day 2025.
-
----
-
-## [[projects/rag-document-qa|Full-Stack RAG Document QA System]]
-
-**FastAPI, React, Qdrant, Redis, Celery, PostgreSQL** | *Jun 2025* | [GitHub](https://github.com/Yahtze/QA_RAG)
-
-- Engineered a hybrid RAG pipeline using Reciprocal Rank Fusion (RRF) to fuse BM25 and semantic vector search, dynamically filtering candidate documents down to the top-k optimal context chunks for SSE answer streaming.
-- Developed an asynchronous distributed ingestion engine using Celery to handle parallel document processing, achieving a throughput of 100+ pages/minute across text extraction, chunking, and 1,536-dim embedding generation.
-- Designed a Redis HNSW semantic cache utilizing a two-pass hydration strategy, cutting downstream LLM API costs by serving repetitive queries with a sub-75ms response latency.
